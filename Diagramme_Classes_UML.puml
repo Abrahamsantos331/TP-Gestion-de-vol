@@ -1,0 +1,72 @@
+@startuml
+title Diagramme de Classes - Gestion d'une Agence de Voyage (Cotonou)
+
+skinparam classAttributeIconSize 0
+skinparam monochrome false
+skinparam class {
+    BackgroundColor #F8FAFC
+    BorderColor #1E3A8A
+    ArrowColor #1E3A8A
+}
+
+class Passager {
+    - idPassager : int
+    - nom : string
+    - prenom : string
+    - telephone : string
+    + Passager(id : int, n : string, p : string, tel : string)
+    + getId() : int
+    + getNomComplet() : string
+    + afficherInfos() : void
+}
+
+class Vol {
+    - numeroVol : string
+    - destination : string
+    - dateDepart : string
+    - capaciteMax : int
+    - placesDisponibles : int
+    - prixBillet : double
+    + Vol(num : string, dest : string, date : string, cap : int, prix : double)
+    + getNumeroVol() : string
+    + getDestination() : string
+    + getPlacesDisponibles() : int
+    + getPrixBillet() : double
+    + reserverPlace() : bool
+    + libererPlace() : void
+    + afficherDetails() : void
+}
+
+class Reservation {
+    - idReservation : int
+    - dateReservation : string
+    - statut : string
+    - passager : Passager*
+    - vol : Vol*
+    - paiement : Paiement*
+    + Reservation(id : int, date : string, p : Passager*, v : Vol*)
+    + getId() : int
+    + getStatut() : string
+    + getPassager() : Passager*
+    + getVol() : Vol*
+    + enregistrerPaiement(idP : int, mode : string, date : string) : bool
+    + annulerReservation() : void
+    + afficherDetails() : void
+}
+
+class Paiement {
+    - idPaiement : int
+    - montant : double
+    - modePaiement : string
+    - datePaiement : string
+    - statutRemboursement : string
+    + Paiement(id : int, m : double, mode : string, date : string)
+    + marquerRembourse() : void
+    + afficherRecu() : void
+}
+
+Passager "1" -- "0..*" Reservation : effectue >
+Vol "1" -- "0..*" Reservation : concerne >
+Reservation "1" *-- "0..1" Paiement : regle par >
+
+@enduml
